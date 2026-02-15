@@ -85,7 +85,6 @@ class BrewfatherCoordinator(DataUpdateCoordinator[BrewfatherCoordinatorData]):
         )
         self.custom_stream_enabled = entry.data.get(CONF_CUSTOM_STREAM_ENABLED, False)
         self.last_update_success_time: Optional[datetime] = None
-        self.custom_stream_gravity_entity_name = None
         if self.custom_stream_enabled:
             self.custom_stream_logging_id = entry.data.get(CONF_CUSTOM_STREAM_LOGGING_ID, None)
 
@@ -355,8 +354,9 @@ class BrewfatherCoordinator(DataUpdateCoordinator[BrewfatherCoordinatorData]):
             return None
 
         # Get gravity if configured
-        if self.custom_stream_gravity_entity_name:
-            gravity_entity = self.hass.states.get(self.custom_stream_gravity_entity_name)
+        gravity_entity_name = getattr(self, 'custom_stream_gravity_entity_name', None)
+        if gravity_entity_name:
+            gravity_entity = self.hass.states.get(gravity_entity_name)
             if gravity_entity is not None:
                 try:
                     gravity_value = gravity_entity.state

@@ -8,4 +8,6 @@ class custom_stream_data:
 
     def __init__(self, name: str) -> None:
         self.name = name
+        self.temp = None
+        self.temp_unit = None
         self.gravity = None
